@@ -1,0 +1,93 @@
+
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+ const int ldrp =A0;
+float TempValue, TempValueC, TempValuemv;
+float k ;
+void setup()
+{ lcd.begin(16, 2);   
+  pinMode(13, OUTPUT);
+  pinMode(ldrp,INPUT);
+  pinMode(A1,INPUT); 
+  Serial.begin(9600);
+}
+
+void loop()
+{
+ const int ldri= analogRead(ldrp);
+  if(ldri<=11)
+  {
+    digitalWrite(13,HIGH);
+  
+    delay(200);
+     digitalWrite(13,LOW);
+    
+    delay(200);
+  }
+     else
+     {
+    digitalWrite(13,LOW);
+    delay(1000);
+  }
+    TempValue=analogRead(A1); 
+    TempValuemv=TempValue*5000/1024;
+    TempValueC=(TempValuemv/10)+(-50);
+ 
+    Serial.println(TempValueC);
+    if(TempValueC>=25&&TempValueC<=35)
+    {
+      lcd.begin(16, 2); 
+      lcd.print("switch on fan");
+      if(ldri<=11){
+        lcd.setCursor(0, 1);
+        lcd.print("switch on light");
+      }
+       else
+     {
+         lcd.setCursor(0, 1);
+         lcd.print("switch off light");
+    digitalWrite(13,LOW);
+    delay(1000);
+  }
+    }
+  else if(TempValueC>35)    
+  {
+    lcd.begin(16, 2); 
+    lcd.print("switch AC ON");
+    if(ldri<=11){
+        lcd.setCursor(0, 1);
+        lcd.print("switch on light");
+      }
+       else
+     {
+         lcd.setCursor(0, 1);
+         lcd.print("switch off light");
+    digitalWrite(13,LOW);
+    delay(1000);
+  }
+  }
+  
+  else
+  {
+    lcd.begin(16, 2); 
+    lcd.print("keep fan,AC OFF");
+     if(ldri<=11){
+        lcd.setCursor(0, 1);
+        lcd.print("switch on light");
+      }
+       else
+     {
+         lcd.setCursor(0, 1);
+         lcd.print("switch off light");
+    digitalWrite(13,LOW);
+    delay(1000);
+  }
+  }Serial.println(ldri);
+    float k =TempValueC;
+      loop();
+  }
+ 
+ 
+
+    
